@@ -56,27 +56,7 @@ Questa guida spiega come accedere alla console di Arch Linux e riparare un siste
 
 ### Passo 5: Modificare i File di Configurazione
 
-1. Ora si ha accesso completo al sistema installato. Modificare il file di configurazione che causa problemi. Ad esempio:
-   ```bash
-   nano /etc/X11/xorg.conf.d/10-nvidia-drm-outputclass.conf
-   ```
-2. Commentare o eliminare le linee che causano problemi. Ad esempio:
-   ```plaintext
-   # Section "OutputClass"
-   #     Identifier "intel"
-   #     MatchDriver "i915"
-   #     Driver "modesetting"
-   # EndSection
-   
-   # Section "OutputClass"
-   #     Identifier "nvidia"
-   #     MatchDriver "nvidia-drm"
-   #     Driver "nvidia"
-   #     Option "AllowEmptyInitialConfiguration"
-   #     Option "PrimaryGPU" "yes"
-   # EndSection
-   ```
-3. Salvare il file premendo `Ctrl + O`, poi `Enter`, e uscire con `Ctrl + X`.
+1. Ora si ha accesso completo al sistema installato. Modificare il file di configurazione che causa problemi.
 
 ### Passo 6: Ripristinare il Boot Loader GRUB (Se Necessario)
 
