@@ -1,7 +1,6 @@
-
 # Setup Guide for VPS and Backend Deployment
 
-## Steps to Initialize the VPS and Deploy the Backend
+## Steps to Initialize the VPS and Deploy the Backend and the frontend
 
 ### 1. Initialize the VPS
 - **Access the VPS**: Connect to the VPS via SSH:
@@ -29,13 +28,18 @@
     npm install -g pm2
     ```
 
+- **Install Nginx**:
+    ```bash
+    sudo apt install nginx
+    ```
+
 ### 3. Grant Sudo Permissions to /home/ubuntu
 - **Add the 'ubuntu' user to the sudo group**:
     ```bash
     sudo usermod -aG sudo ubuntu
     ```
 
-### 4. Clone the Backend Repository
+### 4. Clone the Repository
 - **Install Git (if not already installed)**:
     ```bash
     sudo apt update
@@ -45,6 +49,15 @@
     ```bash
     git clone <URL_DEL_REPOSITORY>
     cd <NOME_DEL_REPOSITORY>
+    npm i
+    npm run build ("build": "tsc")
+    ```
+- **Clone the frontend from the repository**:
+    ```bash
+    git clone <URL_DEL_REPOSITORY>
+    cd <NOME_DEL_REPOSITORY>
+    npm i
+    npm run build ( "build": "ng build --configuration=production --deploy-url=/todoapp/")
     ```
 
 ### 5. Modify Necessary Configurations (.env)
@@ -68,12 +81,82 @@
     pm2 start <NOME_DEL_FILE_DELL_APP> --name todo-app-backend
     pm2 save  # save the configuration for restart
     ```
-
-### 8. Monitor the Backend
 - **Check the app logs**:
     ```bash
     pm2 logs todo-app-backend
     ```
+
+### 8. Start the Frontens with Nginx
+- **Create a folder for the site (todoapp folder for the route todoapp, index.html initial page generic, 404.html error page generic)**:
+    ```bash
+    ls -r /var/www/alexviolatto.com/
+    todoapp  index.html  404.html
+    ```
+- **Create a configuration file for nginx**
+    ```bash
+    sudo nano /etc/nginx/sites-available/todoapp
+    ```
+- **Example of structure**:
+    ```bash
+    server {
+    listen 80;
+    server_name alexviolatto.com www.alexviolatto.com;
+
+    # Redirect all HTTP requests to HTTPS
+    return 301 https://$host$request_uri;
+    }
+    
+    server {
+        listen 443 ssl;
+        server_name alexviolatto.com www.alexviolatto.com;
+    
+        ssl_certificate /etc/letsencrypt/live/alexviolatto.com/fullchain.pem;
+        ssl_certificate_key /etc/letsencrypt/live/alexviolatto.com/privkey.pem;
+        include /etc/letsencrypt/options-ssl-nginx.conf;
+        ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem;
+    
+        root /var/www/alexviolatto.com;
+        index index.html;
+    
+        location = / {
+            try_files $uri $uri/ /index.html;
+        }
+    
+        location /todoapp {
+            alias /var/www/alexviolatto.com/todoapp;
+            index index.html;
+            try_files $uri $uri/ /todoapp/index.html;
+        }
+    
+        location /todoapp/ {
+            try_files $uri $uri/ /todoapp/index.html;
+        }
+    
+        location ~* \.(js|css|png|jpg|jpeg|gif|ico|svg|woff|woff2|ttf|eot|json)$ {
+            try_files $uri =404;
+        }
+    
+        error_page 404 /404.html;
+        location = /404.html {
+            root /var/www/alexviolatto.com;
+            internal;
+        }
+    
+        location / {
+            try_files $uri $uri/ =404;
+        }
+    }
+    ```
+
+### 9. Check nginx conf and restart
+- **Create a folder for the site (todoapp folder for the route todoapp, index.html initial page generic, 404.html error page generic)**:
+    ```bash
+    sudo ln -s /etc/nginx/sites-available/nomesito /etc/nginx/sites-enabled/
+    sudo nginx -t
+    sudo systemctl restart nginx
+    sudo systemctl status nginx
+    ```
+
 
 ## Common Issues and Solutions
 
