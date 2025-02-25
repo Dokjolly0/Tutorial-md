@@ -189,6 +189,7 @@ server {
     error_log /var/log/nginx/alexviolatto.error.log;
 }
 ```
+Per localhost usa [`Questo link`](https://stackoverflow.com/questions/11061788/correct-configuration-for-nginx-to-localhost)
 
 - Abilita la configurazione e controlla lo stato di Nginx:
 
