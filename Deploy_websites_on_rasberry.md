@@ -1,5 +1,5 @@
 
-# Random Anime Generator - Installazione e Configurazione
+# Installazione e Configurazione per l'aggiunta di un sito nel rasberry
 
 Questa guida descrive i passaggi per installare e configurare l'applicazione Random Anime Generator (sia backend che frontend) su un server Ubuntu.
 
