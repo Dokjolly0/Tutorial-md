@@ -98,6 +98,7 @@ npm run build  # "build": "ng build --configuration=production --base-href="/ran
   ```bash
   ng build --configuration=production --base-href=//random-anime-generator/
   ```
+  - Nell'index.html la base href sarà cosi: `//random-anime-generator/` il sito caricherà comunque, ma è consigliato comunque togliere lo slash in piu a fine build`
 - Per `cmd`: 
   ```bash
   ng build --configuration=production --base-href="/random-anime-generator/"
